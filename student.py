@@ -13,6 +13,7 @@ from numpy.linalg import norm
 from sklearn.cluster import KMeans, MiniBatchKMeans
 from scipy.spatial.distance import cdist
 from scipy.stats import mode
+from sklearn.svm import LinearSVC
 
 def get_tiny_images(image_paths):
     '''
@@ -223,7 +224,9 @@ def svm_classify(train_image_feats, train_labels, test_image_feats):
     # TODO: Implement this function!
     clf = LinearSVC(random_state=0, tol=1e-5)
     clf.fit(train_image_feats, train_labels)
-    return np.array([])
+    test_predictions = clf.predict(test_image_feats)
+
+    return test_predictions
 
 def nearest_neighbor_classify(train_image_feats, train_labels, test_image_feats):
     '''
