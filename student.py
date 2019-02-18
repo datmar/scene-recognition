@@ -124,22 +124,20 @@ def build_vocabulary(image_paths, vocab_size):
     '''
 
 
-    images = np.zeros((len(image_paths), 256))
     image_list = [cv2.imread(file) for file in image_paths]
 
     cells_per_block = (8, 8)
     z = cells_per_block[0]
     pixels_per_cell = (4, 4)
     feature_vectors_images = []
-    for image in image_list[0]:
-        feature_vectors = hog(image_list[0], feature_vector=True, pixels_per_cell=pixels_per_cell,
+    for image in image_list:
+        feature_vectors = hog(image, feature_vector=True, pixels_per_cell=pixels_per_cell,
             cells_per_block=cells_per_block, visualize=False)
         feature_vectors = feature_vectors.reshape(-1, z*z*9)
         feature_vectors_images.append(feature_vectors)
     all_feature_vectors = np.vstack(feature_vectors_images)
-    kmeans = MiniBatchKMeans(n_clusters=vocab_size, max_iter=100).fit(all_feature_vectors)
+    kmeans = MiniBatchKMeans(n_clusters=vocab_size, max_iter=500).fit(all_feature_vectors) # change max_iter for lower compute time
     vocabulary = np.vstack(kmeans.cluster_centers_)
-    jksf
     return vocabulary
 
 def get_bags_of_words(image_paths):
@@ -182,13 +180,13 @@ def get_bags_of_words(image_paths):
     # Instantiate empty array
     images_histograms = np.zeros((len(image_list), vocab_length))
 
-    cells_per_block = (8, 8)
+    cells_per_block = (8, 8) # Change for lower compute time
     z = cells_per_block[0]
-    pixels_per_cell = (4, 4)
+    pixels_per_cell = (4, 4) # Change for lower compute time
     feature_vectors_images = []
 
     for i, image in enumerate(image_list):
-        feature_vectors = hog(image_list[0], feature_vector=True, pixels_per_cell=pixels_per_cell,
+        feature_vectors = hog(image, feature_vector=True, pixels_per_cell=pixels_per_cell,
                               cells_per_block=cells_per_block, visualize=False)
         feature_vectors = feature_vectors.reshape(-1, z*z*9)
         histogram = np.zeros(vocab_length)
@@ -223,7 +221,8 @@ def svm_classify(train_image_feats, train_labels, test_image_feats):
     '''
 
     # TODO: Implement this function!
-
+    clf = LinearSVC(random_state=0, tol=1e-5)
+    clf.fit(train_image_feats, train_labels)
     return np.array([])
 
 def nearest_neighbor_classify(train_image_feats, train_labels, test_image_feats):
@@ -272,17 +271,17 @@ def nearest_neighbor_classify(train_image_feats, train_labels, test_image_feats)
 
     #TODO:
     # 1) Find the k closest features to each test image feature
-    sorted_indices = np.argsort(distances, axis=0)
-    knns = sorted_indices[0:k,:].T
+    sorted_indices = np.argsort(distances, axis=1)
+    knns = sorted_indices[:,0:k]
+
     # 2) Determine the labels of those k features
     labels = np.zeros_like(knns)
     get_labels = lambda t: train_labels[t]
     vlabels = np.vectorize(get_labels)
 
     # Simple majority/plurality vote to choose label
-    labels = vlabels(knns)
+    labels = vlabels(knns) # Enhance this with  distances to make weighted vote
+    # Pick the most common label from the k
     labels = mode(np.unique(labels, return_counts=True, axis=1)[0], axis=1)[0]
-    # 3) Pick the most common label from the k
-    # 4) Store that label in a list
 
     return labels
