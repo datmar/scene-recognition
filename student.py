@@ -8,7 +8,6 @@ from skimage.io import imread
 from skimage.color import rgb2grey
 from skimage.feature import hog
 from skimage.transform import resize
-
 from numpy.linalg import norm
 from sklearn.cluster import KMeans, MiniBatchKMeans
 from scipy.spatial.distance import cdist
@@ -46,12 +45,11 @@ def get_tiny_images(image_paths):
                          skimage.io.imread, np.reshape
     '''
     images = np.zeros((len(image_paths), 256))
-    image_list = [cv2.imread(file) for file in image_paths]
-    for i, img in enumerate(image_list):
+    for i, file in enumerate(image_paths):
+        img = imread(file)
         img = rgb2grey(img)
         img = resize(img, (16, 16), anti_aliasing=True).flatten()
         images[i] = img / norm(img)
-
     return images
 
 def build_vocabulary(image_paths, vocab_size):
@@ -125,9 +123,9 @@ def build_vocabulary(image_paths, vocab_size):
     '''
 
 
-    image_list = [cv2.imread(file) for file in image_paths]
+    image_list = [imread(file) for file in image_paths]
 
-    cells_per_block = (8, 8)
+    cells_per_block = (2, 2)
     z = cells_per_block[0]
     pixels_per_cell = (4, 4)
     feature_vectors_images = []
@@ -181,7 +179,7 @@ def get_bags_of_words(image_paths):
     # Instantiate empty array
     images_histograms = np.zeros((len(image_list), vocab_length))
 
-    cells_per_block = (8, 8) # Change for lower compute time
+    cells_per_block = (2, 2) # Change for lower compute time
     z = cells_per_block[0]
     pixels_per_cell = (4, 4) # Change for lower compute time
     feature_vectors_images = []
