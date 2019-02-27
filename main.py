@@ -138,7 +138,7 @@ def projSceneRecBoW():
 
             test_image_feats  = get_bags_of_words(test_image_paths)
             # Same goes here for test image features.
-            np.save('BoW_test_features.npy', train_image_feats)
+            np.save('BoW_test_features.npy', test_image_feats)
         else:
             train_image_feats = np.load('BoW_train_features.npy')
             test_image_feats = np.load('BoW_test_features.npy')
