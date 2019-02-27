@@ -60,8 +60,8 @@ def projSceneRecBoW():
     FEATURE = 'bag of words'
     # FEATURE = 'placeholder'
 
-    # CLASSIFIER = 'nearest neighbor'
-    CLASSIFIER = 'support vector machine'
+    CLASSIFIER = 'nearest neighbor'
+    # CLASSIFIER = 'support vector machine'
     # CLASSIFIER = 'placeholder'
 
     # This is the path the script will look at to load images from.
