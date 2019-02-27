@@ -174,7 +174,7 @@ def get_bags_of_words(image_paths):
     
     #TODO: Implement this function!
     vocab_length = vocab.shape[0]
-    image_list = [cv2.imread(file) for file in image_paths]
+    image_list = [imread(file) for file in image_paths]
     
     # Instantiate empty array
     images_histograms = np.zeros((len(image_list), vocab_length))
