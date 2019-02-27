@@ -56,8 +56,8 @@ def projSceneRecBoW():
     # Step 0: Set up parameters, category list, and image paths.
     # Uncomment various feature and classifier combinations to test them.
 
-    FEATURE = 'tiny image'
-    # FEATURE = 'bag of words'
+    # FEATURE = 'tiny image'
+    FEATURE = 'bag of words'
     # FEATURE = 'placeholder'
 
     # CLASSIFIER = 'nearest neighbor'
