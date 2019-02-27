@@ -437,7 +437,7 @@ paket-files/
 .cr/
 
 # Python Tools for Visual Studio (PTVS)
-__pycache__/
+*pycache*/
 *.pyc
 
 # Cake - Uncomment if you are using it
