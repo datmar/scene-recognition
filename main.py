@@ -9,15 +9,10 @@ from create_results_webpage import create_results_webpage
 
 def projSceneRecBoW():
     '''
-    For this project, you will need to report performance for three
-    combinations of features / classifiers. We recommend that you code them in
-    this order:
+    Report performance for three combinations of features / classifiers.
         1) Tiny image features and nearest neighbor classifier
         2) Bag of word features and nearest neighbor classifier
         3) Bag of word features and linear SVM classifier
-    The starter code is initialized to 'placeholder' just so that the starter
-    code does not crash when run unmodified and you can get a preview of how
-    results are presented.
 
     Interpreting your performance with 100 training examples per category:
      accuracy  =   0 -> Something is broken.
@@ -53,7 +48,6 @@ def projSceneRecBoW():
                         labels.
     '''
 
-    # Step 0: Set up parameters, category list, and image paths.
     # Uncomment various feature and classifier combinations to test them.
 
     # FEATURE = 'tiny image'
@@ -90,18 +84,7 @@ def projSceneRecBoW():
     print('Getting paths and labels for all train and test data.')
     train_image_paths, test_image_paths, train_labels, test_labels = \
         get_image_paths(data_path, categories, num_train_per_cat)
-    #   train_image_paths  1500x1   list
-    #   test_image_paths   1500x1   list
-    #   train_labels       1500x1   list
-    #   test_labels        1500x1   list
 
-    ############################################################################
-    ## Step 1: Represent each image with the appropriate feature
-    # Each function to construct features should return an N x d matrix, where
-    # N is the number of paths passed to the function and d is the
-    # dimensionality of each image representation. See the starter code for
-    # each function for more details.
-    ############################################################################
 
     print('Using %s representation for images.' % FEATURE)
 
@@ -124,16 +107,12 @@ def projSceneRecBoW():
             #Larger values will work better (to a point), but are slower to compute
             vocab_size = 200
 
-            # YOU CODE build_vocabulary (see student.py)
             vocab = build_vocabulary(train_image_paths, vocab_size)
             np.save('vocab.npy', vocab)
 
-        # YOU CODE get_bags_of_words.m (see student.py)
         if not (os.path.isfile('BoW_train_features.npy') and os.path.isfile('BoW_test_features.npy')):
             train_image_feats = get_bags_of_words(train_image_paths)
-            # You may want to write out train_image_features here as a *.npy and
-            # load it up later if you want to just test your classifiers without
-            # re-computing features
+            # Write out train_features so we don't have to  re-compute features every time for BoW
             np.save('BoW_train_features.npy', train_image_feats)
 
             test_image_feats  = get_bags_of_words(test_image_paths)
@@ -152,13 +131,12 @@ def projSceneRecBoW():
         raise ValueError('Unknown feature type!')
 
     ############################################################################
-    ## Step 2: Classify each test image by training and using the appropriate classifier
+    ## Classify each test image by training and using the appropriate classifier
     # Each function to classify test features will return an N x 1 string array,
     # where N is the number of test cases and each entry is a string indicating
     # the predicted category for each test image. Each entry in
     # 'predicted_categories' must be one of the 15 strings in 'categories',
-    # 'train_labels', and 'test_labels'. See the starter code for each function
-    # for more details.
+    # 'train_labels', and 'test_labels'.
     ############################################################################
 
     print('Using %s classifier to predict test set categories.' % CLASSIFIER)
@@ -180,17 +158,10 @@ def projSceneRecBoW():
         raise ValueError('Unknown classifier type')
 
     ############################################################################
-    ## Step 3: Build a confusion matrix and score the recognition system
-    # You do not need to code anything in this section.
-
-    # If we wanted to evaluate our recognition method properly we would train
-    # and test on many random splits of the data. You are not required to do so
-    # for this project.
+    ## Build a confusion matrix and score the recognition system
 
     # This function will recreate results_webpage/index.html and various image
-    # thumbnails each time it is called. View the webpage to help interpret
-    # your classifier performance. Where is it making mistakes? Are the
-    # confusions reasonable?
+    # thumbnails each time it is called.
     ############################################################################
 
     create_results_webpage( train_image_paths, \
